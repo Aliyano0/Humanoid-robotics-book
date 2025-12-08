@@ -1,0 +1,163 @@
+---
+id: 01-spawn-robot
+title: Spawning Your First Robot in Gazebo
+sidebar_position: 1
+---
+
+# Spawning Your First Robot in Gazebo
+
+This section provides a hands-on guide to spawning a simple robot model in the Gazebo simulation environment, allowing for basic interaction and visualization.
+
+## Launching Gazebo with ROS 2
+
+First, let's launch Gazebo with ROS 2 integration:
+
+```bash
+# Launch Gazebo with an empty world
+ros2 launch gazebo_ros empty_world.launch.py
+
+# Or launch with a specific world
+ros2 launch gazebo_ros empty_world.launch.py world_name:=my_world.sdf
+```
+
+## Spawning a Robot Model
+
+To spawn a robot model into the simulation, we can use the `spawn_entity.py` script:
+
+```bash
+# Spawn a simple robot model (e.g., a differential drive robot)
+ros2 run gazebo_ros spawn_entity.py -entity my_robot -file /path/to/robot/model.sdf -x 0 -y 0 -z 1
+```
+
+## Creating a Robot Model (URDF Example)
+
+Here's a simple URDF robot model that you can spawn in Gazebo:
+
+```xml
+<?xml version="1.0"?>
+<robot name="simple_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.5 0.3 0.2"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.5 0.3 0.2"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <!-- Left Wheel -->
+  <link name="left_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!-- Right Wheel -->
+  <link name="right_wheel">
+    <visual>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <!-- Joints -->
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="0 0.2 -0.1" rpy="1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="0 -0.2 -0.1" rpy="1.5708 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+</robot>
+```
+
+## Launching Your Robot
+
+To launch your robot in Gazebo, create a launch file:
+
+```python
+from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import PathJoinSubstitution
+from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
+
+def generate_launch_description():
+    # Launch Gazebo
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            PathJoinSubstitution([
+                FindPackageShare('gazebo_ros'),
+                'launch',
+                'gazebo.launch.py'
+            ])
+        ])
+    )
+
+    # Spawn robot
+    spawn_entity = Node(
+        package='gazebo_ros',
+        executable='spawn_entity.py',
+        arguments=['-topic', 'robot_description', '-entity', 'my_robot'],
+        output='screen'
+    )
+
+    return LaunchDescription([
+        gazebo,
+        spawn_entity,
+    ])
+```
+
+:::tip
+When creating robot models, always include proper inertial properties and collision geometry to ensure realistic physics simulation in Gazebo.
+:::
+
+:::info
+Gazebo Harmonic provides advanced features like OSG rendering, physics plugins, and sensor simulation that make it ideal for testing robotic algorithms before deployment on real hardware.
+:::

@@ -208,3 +208,5 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+- Don't request more than 4 times within a minute. The request per minute is limited on my api key.
+- Use context7 mcp for docusaurus documentation. The link is https://docusaurus.io/docs

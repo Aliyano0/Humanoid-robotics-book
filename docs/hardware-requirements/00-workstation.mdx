@@ -1,0 +1,115 @@
+---
+id: 00-workstation
+title: Workstation Requirements
+sidebar_position: 0
+---
+
+# Workstation Requirements
+
+This section outlines the hardware requirements for developing humanoid robots, including recommended specifications for workstations, GPU requirements, and considerations for the "Latency Trap" that can impact real-time robotics applications.
+
+## Workstation Specifications
+
+### Minimum Requirements
+| Component | Specification | Notes |
+|-----------|---------------|-------|
+| CPU | Intel i7-10700K or AMD Ryzen 7 3700X | 8+ cores, 3.0+ GHz |
+| RAM | 32 GB DDR4 | 2933 MHz or faster |
+| GPU | NVIDIA RTX 3070 | 8 GB VRAM minimum |
+| Storage | 1 TB SSD | NVMe preferred |
+| OS | Ubuntu 22.04 LTS | Primary development environment |
+
+### Recommended Requirements
+| Component | Specification | Notes |
+|-----------|---------------|-------|
+| CPU | Intel i9-12900K or AMD Ryzen 9 5900X | 16+ cores for simulation |
+| RAM | 64 GB DDR4/DDR5 | 3200 MHz or faster |
+| GPU | NVIDIA RTX 4080/4090 or RTX A5000/A6000 | 16+ GB VRAM |
+| Storage | 2+ TB NVMe SSD | Fast read/write for datasets |
+| OS | Ubuntu 22.04 LTS | With real-time kernel for robotics |
+
+### Budget Options
+| Component | Specification | Cost Estimate | Notes |
+|-----------|---------------|---------------|-------|
+| CPU | AMD Ryzen 7 5800X | ~$300 | Excellent performance/price |
+| RAM | 32 GB DDR4-3600 | ~$100 | Sufficient for most tasks |
+| GPU | NVIDIA RTX 4060 Ti 16GB | ~$400 | Good for AI workloads |
+| Storage | 1 TB NVMe SSD | ~$50 | Adequate for development |
+| Total | - | ~$850 | Great starting point |
+
+## GPU Requirements for AI/Robotics
+
+### Simulation and Training
+- **Minimum**: RTX 3070 (8GB) - Basic simulation and small model training
+- **Recommended**: RTX 4080/4090 (16-24GB) - Complex simulation and model training
+- **Professional**: RTX A5000/A6000 (24GB+) - Production-level work
+
+### Deep Learning Considerations
+- VRAM is critical for batch sizes and model complexity
+- CUDA cores affect training and inference speed
+- Tensor cores accelerate mixed-precision operations
+- Consider power consumption (200-450W) and cooling
+
+## The Latency Trap
+
+### What is the Latency Trap?
+The "Latency Trap" is a common pitfall in humanoid robotics development where excessive processing delays cause systems to become non-responsive or unstable. In real-time robotics applications, especially those involving dynamic balance or interaction, delays above certain thresholds can make the system unusable or even dangerous.
+
+### Critical Latency Thresholds
+| Operation | Safe Latency | Performance Impact | Notes |
+|-----------|--------------|-------------------|-------|
+| Balance Control | < 10ms | Stability degradation | Critical for walking robots |
+| Visual Servoing | < 30ms | Tracking accuracy | Important for manipulation |
+| Collision Avoidance | < 50ms | Safety risk | Essential for safe operation |
+| Human Interaction | < 100ms | Naturalness | User experience factor |
+
+### Latency Sources and Solutions
+| Source | Impact | Mitigation Strategy |
+|--------|--------|-------------------|
+| CPU Processing | 5-50ms | Multi-threading, optimized algorithms |
+| GPU Processing | 10-100ms | GPU acceleration, batch processing |
+| Network Communication | 1-100ms | Local processing, 5G/edge computing |
+| Sensor Readout | 1-20ms | Fast sensors, direct connections |
+| Motor Control | 1-10ms | Real-time OS, dedicated controllers |
+
+### Avoiding the Latency Trap
+1. **Profile Everything**: Measure actual latencies in your system
+2. **Prioritize Critical Paths**: Ensure safety-critical systems have the lowest latency
+3. **Use Real-Time OS**: Consider RT kernel or dedicated real-time systems
+4. **Edge Processing**: Minimize network dependencies for critical functions
+5. **Hierarchical Architecture**: Separate fast control loops from slow planning
+
+## Additional Hardware Considerations
+
+### Network Infrastructure
+- Gigabit Ethernet (1 Gbps) minimum for robot communication
+- 10 Gbps recommended for multi-robot systems
+- 5G/6G for wireless applications (where permitted)
+
+### Peripherals
+- High-resolution cameras (4K, >60fps)
+- LiDAR sensors for navigation
+- Inertial Measurement Units (IMU)
+- Microphone arrays for audio processing
+
+### Cooling and Power
+- Adequate cooling for sustained high-performance operation
+- Uninterruptible Power Supply (UPS) for critical development work
+- Power consumption: 800W-1500W for high-end configurations
+
+## Cost Considerations
+
+### Initial Investment vs. Long-term Value
+| Approach | Upfront Cost | Long-term Benefits | Use Case |
+|----------|--------------|-------------------|----------|
+| High-end Workstation | $4,000-8,000 | Fast development, future-proof | Professional/R&D |
+| Mid-range Setup | $1,500-3,000 | Good balance | Serious hobbyist/Student |
+| Budget Build | $800-1,500 | Accessible entry point | Learning/Curious beginner |
+
+:::tip
+Start with a mid-range system and upgrade components as needed. The GPU is typically the most important component for AI and simulation work.
+:::
+
+:::info
+The Latency Trap is a critical concept in humanoid robotics. Many promising projects fail because of accumulated delays in perception, planning, and control loops. Always design your system with latency budgets in mind from the beginning.
+:::

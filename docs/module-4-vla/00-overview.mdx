@@ -1,0 +1,63 @@
+---
+id: 00-overview
+title: Overview of Vision-Language-Action Models
+sidebar_position: 0
+---
+
+# Overview of Vision-Language-Action (VLA) Models
+
+This module introduces Vision-Language-Action models as the next frontier in physical AI, exploring how these multimodal systems enable robots to understand, reason, and act in complex environments using visual, linguistic, and motor inputs.
+
+Vision-Language-Action (VLA) models represent a breakthrough in embodied AI, combining computer vision, natural language processing, and motor control in a unified framework. These models allow robots to receive natural language instructions and directly translate them into physical actions, bridging the gap between high-level human commands and low-level robot control.
+
+## Key Concepts in VLA Models
+
+### Multimodal Integration
+VLA models process multiple input modalities simultaneously:
+- **Visual Input**: Camera images, depth maps, and other visual sensors
+- **Language Input**: Natural language commands and descriptions
+- **Action Output**: Motor commands to control robot actuators
+
+### End-to-End Learning
+Unlike traditional approaches that decompose tasks into separate perception, planning, and control modules, VLA models learn these capabilities jointly, enabling more robust and adaptive behavior.
+
+### Foundation Models
+Modern VLA models are built on large foundation models trained on massive datasets, allowing them to generalize across diverse tasks and environments with minimal fine-tuning.
+
+## Approaches to VLA Implementation
+
+### OpenVLA-7B
+A state-of-the-art open-source VLA model that enables robots to follow natural language instructions for manipulation tasks. OpenVLA combines a vision transformer with a language model and action generation capabilities.
+
+### Custom Solutions
+For specialized applications, developers may create custom VLA systems using:
+- Whisper for speech recognition
+- GPT models for language understanding
+- Custom vision models for perception
+- Reinforcement learning for action generation
+
+## Integration with Physical Robots
+
+VLA models can be integrated with physical robots through:
+
+1. **Simulation-to-Real Transfer**: Training primarily in simulation with domain adaptation
+2. **Reinforcement Learning**: Learning policies through environmental interaction
+3. **Imitation Learning**: Learning from human demonstrations
+4. **Prompt Engineering**: Crafting effective prompts for language models
+
+## Challenges and Considerations
+
+Implementing VLA systems presents several challenges:
+
+- **Safety**: Ensuring safe robot behavior under uncertain model predictions
+- **Latency**: Managing computational requirements for real-time control
+- **Robustness**: Handling diverse real-world conditions
+- **Scalability**: Efficiently training and deploying models
+
+:::tip
+Start with simple language commands and gradually increase complexity. Use simulation environments like Isaac Sim to safely develop and test VLA capabilities before deploying on physical robots.
+:::
+
+:::info
+VLA models are rapidly evolving, with new architectures and training methods being developed regularly. Stay updated with the latest research and implementations in the field.
+:::

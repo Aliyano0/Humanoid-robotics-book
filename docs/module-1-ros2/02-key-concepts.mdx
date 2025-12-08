@@ -1,0 +1,41 @@
+---
+id: 02-key-concepts
+title: ROS 2 Key Concepts
+sidebar_position: 2
+---
+
+# ROS 2 Key Concepts
+
+This section delves into the fundamental concepts of ROS 2, including nodes, topics, services, actions, and parameters, explaining how they form the backbone of robotic applications.
+
+## Nodes
+
+Nodes are the fundamental building blocks of a ROS 2 system. Each node is a process that performs computation. Multiple nodes work together to form a complete robotic application. Nodes are designed to be modular and focused on a single task.
+
+## Topics and Message Passing
+
+Topics enable asynchronous communication between nodes using a publish-subscribe pattern. Publishers send messages to topics, and subscribers receive messages from topics. This decouples the sender and receiver, allowing for flexible system design.
+
+## Services
+
+Services provide synchronous request-response communication between nodes. A client sends a request to a service, and the service processes the request and sends back a response. This is useful for operations that require a definite outcome.
+
+## Actions
+
+Actions are used for long-running tasks that have goals, feedback, and results. Unlike services, actions are asynchronous and provide ongoing feedback during execution. They're ideal for tasks like navigation or manipulation.
+
+## Parameters
+
+Parameters are configuration values that can be changed at runtime. They allow nodes to be configured without recompilation and can be set at launch time or changed dynamically during execution.
+
+## Packages and Workspaces
+
+ROS 2 organizes code into packages, which contain nodes, libraries, and other resources. Multiple packages are organized into workspaces for building and managing related functionality.
+
+:::tip
+Think of nodes as individual workers in a factory, each responsible for a specific task. Topics are like conveyor belts moving information between workers, services are like direct requests between workers, and actions are like complex projects that require ongoing communication and feedback.
+:::
+
+:::info
+ROS 2 uses DDS (Data Distribution Service) as its underlying communication middleware, providing reliable, real-time data exchange between nodes.
+:::

@@ -1,0 +1,178 @@
+---
+id: 01-edge-kit
+title: Edge Computing Kit
+sidebar_position: 1
+---
+
+# Edge Computing Kit
+
+This section details the hardware requirements for edge computing solutions in humanoid robotics, focusing on compact, low-power computing platforms suitable for deployment on the robot itself. Edge computing is critical for humanoid robots as it enables real-time processing without relying on cloud connectivity, reducing latency and improving safety for autonomous operations.
+
+## Edge Computing Platforms
+
+### NVIDIA Jetson Series
+
+The NVIDIA Jetson platform is the most popular choice for edge AI in robotics, offering powerful GPU acceleration in compact form factors:
+
+| Model | GPU | CPU | RAM | Power | AI Performance | Price |
+|-------|-----|-----|-----|-------|----------------|-------|
+| Jetson Nano | 128-core Maxwell | Quad-core ARM A57 | 4GB | 5-10W | 0.47 TOPS | ~$99 |
+| Jetson TX2 | 256-core Pascal | Dual Denver 2 + Quad ARM A57 | 8GB | 7-15W | 1.33 TOPS | ~$399 |
+| Jetson Xavier NX | 384-core Volta | Hexa-core ARM Carmel | 8GB | 10-25W | 21 TOPS | ~$399 |
+| Jetson AGX Orin | 2048-core Ada | 12-core ARM Cortex-A78AE | 32GB | 15-60W | 275 TOPS | ~$1,499 |
+
+### Raspberry Pi with AI Acceleration
+
+For simpler applications, Raspberry Pi models with AI accelerators offer an affordable entry point:
+
+- **Raspberry Pi 4B (8GB)**: Quad-core ARM Cortex-A72, 8GB RAM, 6-10W power consumption
+- **Coral USB Accelerator**: Google's Edge TPU for TensorFlow Lite models (4 TOPS)
+- **AI Hat options**: Various add-on boards with dedicated AI chips
+
+### Intel Neural Compute Sticks
+
+Intel's Movidius Neural Compute Sticks provide USB-based AI acceleration:
+
+- **NCS2**: Intel Movidius Myriad X VPU, 1 TOPS, USB 3.0
+- **NCS3**: Intel Movidius Myriad X VPU, 2 TOPS, USB 3.0
+- Perfect for inference acceleration with minimal power consumption
+
+## Performance Considerations
+
+### Latency Requirements for Edge Computing
+
+Edge computing is essential for meeting the critical latency requirements in humanoid robotics:
+
+| Operation | Safe Latency | Edge Computing Solution | Notes |
+|-----------|--------------|------------------------|-------|
+| Balance Control | < 10ms | Real-time OS + dedicated controllers | Critical for walking robots |
+| Visual Servoing | < 30ms | GPU-accelerated inference | Important for manipulation |
+| Collision Avoidance | < 50ms | Onboard sensors + processing | Essential for safe operation |
+| Human Interaction | < 100ms | Local speech processing | User experience factor |
+
+### Power Efficiency
+
+When selecting edge computing hardware, consider power consumption carefully:
+
+- **Jetson Nano**: 5-10W typical, suitable for battery-powered robots
+- **Jetson TX2**: 7-15W, good balance of performance and power
+- **Jetson Xavier NX**: 10-25W, high performance for complex tasks
+- **Raspberry Pi 4**: 6-10W, excellent for simple perception tasks
+
+## Integration with Robot Platforms
+
+### Mounting and Cooling
+
+Edge computing devices must be properly mounted and cooled on humanoid robots:
+
+- **Vibration isolation**: Use rubber mounts to protect sensitive electronics
+- **Thermal management**: Implement heatsinks and fans as needed
+- **Power distribution**: Ensure stable voltage and current delivery
+- **EMI shielding**: Minimize interference with other robot systems
+
+### Communication Protocols
+
+Edge computing platforms typically interface with robot systems using:
+
+- **Ethernet**: Gigabit for high-bandwidth sensor data
+- **USB**: For cameras, sensors, and peripheral devices
+- **CAN bus**: For motor control and safety-critical communications
+- **UART**: For legacy sensors and custom interfaces
+
+## Budget Options
+
+### Entry-Level Edge Setup
+| Component | Specification | Cost Estimate | Notes |
+|-----------|---------------|---------------|-------|
+| Jetson Nano | 4GB RAM | ~$100 | Basic AI inference |
+| Power supply | 5V/4A barrel jack | ~$20 | Proper power delivery |
+| MicroSD card | 64GB UHS-I | ~$15 | OS and storage |
+| Heatsink kit | Aluminum + fan | ~$10 | Thermal management |
+| Total | - | ~$145 | Good for learning |
+
+### Mid-Range Edge Setup
+| Component | Specification | Cost Estimate | Notes |
+|-----------|---------------|---------------|-------|
+| Jetson Xavier NX | 8GB RAM | ~$400 | Good performance |
+| Power supply | 19V/65W | ~$30 | Adequate power |
+| SSD | 128GB NVMe | ~$40 | Fast storage |
+| Case with cooling | Enclosure with fan | ~$50 | Protection |
+| Total | - | ~$520 | Suitable for complex tasks |
+
+### High-Performance Edge Setup
+| Component | Specification | Cost Estimate | Notes |
+|-----------|---------------|---------------|-------|
+| Jetson AGX Orin | 32GB RAM | ~$1,500 | Maximum performance |
+| Power supply | 19V/120W | ~$50 | High power delivery |
+| M.2 SSD | 512GB NVMe | ~$100 | Fast storage |
+| Industrial case | Ruggedized | ~$150 | Protection |
+| Total | - | ~$1,800 | Production-ready |
+
+## Software Stack
+
+### Operating System Options
+
+- **JetPack**: NVIDIA's official OS for Jetson platforms (Ubuntu-based)
+- **Raspberry Pi OS**: Optimized for Raspberry Pi with AI accelerators
+- **Real-time Linux**: For critical timing applications
+- **ROS 2 compatibility**: Ensure full support for robotics middleware
+
+### AI Framework Support
+
+Edge computing platforms must support essential AI frameworks:
+
+- **TensorRT**: NVIDIA's inference optimizer for Jetson platforms
+- **TensorFlow Lite**: Lightweight inference for various platforms
+- **PyTorch Mobile**: For PyTorch model deployment
+- **OpenVINO**: Intel's inference engine for Movidius devices
+
+## Practical Applications
+
+### Onboard Perception
+
+Edge computing enables real-time perception capabilities:
+
+- Object detection and tracking
+- Human pose estimation
+- SLAM (Simultaneous Localization and Mapping)
+- Depth estimation from stereo cameras
+
+### Control and Planning
+
+- Low-level motor control
+- Trajectory planning and execution
+- Inverse kinematics calculations
+- Balance and stability control
+
+### Safety and Monitoring
+
+- Emergency stop functionality
+- System health monitoring
+- Battery management
+- Thermal protection
+
+## Limitations and Trade-offs
+
+### Performance vs. Power
+
+Edge computing devices require balancing performance with power consumption:
+
+- Higher performance typically means higher power consumption
+- Limited thermal dissipation in compact robot bodies
+- Battery life considerations for mobile robots
+- Processing capabilities may limit algorithm complexity
+
+### Development Complexity
+
+- Optimizing models for edge deployment requires specialized knowledge
+- Different platforms have different optimization requirements
+- Debugging distributed systems can be challenging
+- Limited debugging interfaces compared to workstation systems
+
+:::tip
+Start with a Jetson Nano for learning and prototyping. Upgrade to Xavier NX or AGX Orin as your requirements grow. Consider using model quantization to optimize performance on edge devices.
+:::
+
+:::info
+Edge computing is essential for humanoid robots that need to operate autonomously without relying on cloud connectivity. The choice of platform significantly impacts the robot's capabilities, battery life, and operational reliability.
+:::

@@ -1,0 +1,97 @@
+---
+id: 01-hello-ros
+title: Hello ROS 2
+sidebar_position: 1
+---
+
+# Hello ROS 2: Your First Node
+
+This section guides you through creating your first ROS 2 publisher and subscriber, demonstrating basic communication between nodes.
+
+## Creating a Publisher Node
+
+Let's start by creating a simple publisher that sends "Hello World" messages:
+
+```python
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+
+class MinimalPublisher(Node):
+    def __init__(self):
+        super().__init__('minimal_publisher')
+        self.publisher_ = self.create_publisher(String, 'topic', 10)
+        timer_period = 0.5  # seconds
+        self.timer = self.create_timer(timer_period, self.timer_callback)
+        self.i = 0
+
+    def timer_callback(self):
+        msg = String()
+        msg.data = f'Hello World: {self.i}'
+        self.publisher_.publish(msg)
+        self.get_logger().info(f'Publishing: "{msg.data}"')
+        self.i += 1
+
+def main(args=None):
+    rclpy.init(args=args)
+    minimal_publisher = MinimalPublisher()
+    rclpy.spin(minimal_publisher)
+    minimal_publisher.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+```
+
+## Creating a Subscriber Node
+
+Now let's create a subscriber that receives and logs the messages:
+
+```python
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+
+class MinimalSubscriber(Node):
+    def __init__(self):
+        super().__init__('minimal_subscriber')
+        self.subscription = self.create_subscription(
+            String,
+            'topic',
+            self.listener_callback,
+            10)
+        self.subscription  # prevent unused variable warning
+
+    def listener_callback(self, msg):
+        self.get_logger().info(f'I heard: "{msg.data}"')
+
+def main(args=None):
+    rclpy.init(args=args)
+    minimal_subscriber = MinimalSubscriber()
+    rclpy.spin(minimal_subscriber)
+    minimal_subscriber.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == '__main__':
+    main()
+```
+
+## Running the Example
+
+To run this example:
+
+1. Create a new ROS 2 package: `ros2 pkg create --build-type ament_python hello_ros2`
+2. Place the publisher code in `hello_ros2/hello_ros2/publisher_member_function.py`
+3. Place the subscriber code in `hello_ros2/hello_ros2/subscriber_member_function.py`
+4. Run the publisher: `ros2 run hello_ros2 publisher_member_function`
+5. In another terminal, run the subscriber: `ros2 run hello_ros2 subscriber_member_function`
+
+You should see the publisher sending messages and the subscriber receiving them!
+
+:::tip
+The publisher and subscriber communicate through a topic named "topic". The publisher sends String messages at 2 Hz (every 0.5 seconds), and the subscriber receives and logs them.
+:::
+
+:::info
+This simple example demonstrates the publish-subscribe pattern, which is fundamental to ROS 2. Nodes can publish data to topics without knowing who will receive it, and other nodes can subscribe to topics without knowing who published the data.
+:::

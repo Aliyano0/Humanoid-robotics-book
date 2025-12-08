@@ -1,0 +1,76 @@
+---
+id: 02-sensors-sim
+title: Sensors and Simulation
+sidebar_position: 2
+---
+
+# Sensors and Simulation
+
+This section covers the integration of various sensors within a simulation environment and how their data can be used to perceive and interact with the digital world.
+
+## Common Sensor Types in Simulation
+
+### Camera Sensors
+Camera sensors simulate RGB, depth, or stereo vision systems. They provide visual data that robots use for object recognition, navigation, and scene understanding.
+
+### LIDAR Sensors
+LIDAR (Light Detection and Ranging) sensors simulate laser-based distance measurement. They provide 2D or 3D point cloud data for mapping, localization, and obstacle detection.
+
+### IMU Sensors
+Inertial Measurement Unit (IMU) sensors simulate accelerometers and gyroscopes that measure orientation, acceleration, and angular velocity. These are crucial for balance and motion control in humanoid robots.
+
+### Force/Torque Sensors
+These sensors simulate measurements of forces and torques applied to robot joints, important for manipulation and contact-based tasks.
+
+## Sensor Integration in Gazebo
+
+Sensors are integrated into robot models through plugins in URDF/SDF files:
+
+```xml
+<gazebo reference="camera_link">
+  <sensor type="camera" name="camera1">
+    <update_rate>30.0</update_rate>
+    <camera name="head">
+      <horizontal_fov>1.3962634</horizontal_fov>
+      <image>
+        <width>800</width>
+        <height>600</height>
+        <format>R8G8B8</format>
+      </image>
+      <clip>
+        <near>0.1</near>
+        <far>100.0</far>
+      </clip>
+    </camera>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <frame_name>camera_link</frame_name>
+      <topic_name>image_raw</topic_name>
+    </plugin>
+  </sensor>
+</gazebo>
+```
+
+## Sensor Data Processing
+
+Simulated sensor data follows the same ROS 2 message types as real sensors, allowing seamless integration with existing algorithms:
+
+- Camera data: `sensor_msgs/Image` and `sensor_msgs/CameraInfo`
+- LIDAR data: `sensor_msgs/LaserScan` or `sensor_msgs/PointCloud2`
+- IMU data: `sensor_msgs/Imu`
+- Joint states: `sensor_msgs/JointState`
+
+## Sim-to-Real Transfer
+
+Simulation provides a safe, fast, and cost-effective environment for developing perception algorithms. However, differences between simulated and real sensors (domain gap) must be addressed through:
+
+- **Domain randomization**: Varying lighting, textures, and environmental conditions
+- **Simulation parameters tuning**: Matching real-world physics and sensor characteristics
+- **Progressive transfer**: Starting with simulation and gradually introducing real-world data
+
+:::tip
+Always validate your perception algorithms on real hardware after simulation, as perfect simulation is impossible. The goal is to use simulation to develop robust algorithms that can handle real-world variations.
+:::
+
+:::info
+Modern simulation platforms like NVIDIA Isaac Sim offer physically-based rendering and accurate sensor models that significantly reduce the sim-to-real gap compared to traditional simulators.
+:::

@@ -1,0 +1,175 @@
+---
+id: 02-perception-pipeline
+title: Perception Pipeline with Isaac Sim
+sidebar_position: 2
+---
+
+# Perception Pipeline with Isaac Sim
+
+This section explores how to build perception pipelines using NVIDIA Isaac Sim, including sensor data processing, computer vision techniques, and integration with the AI robot brain for environment understanding.
+
+## Perception Pipeline Components
+
+A complete perception pipeline in Isaac Sim typically includes:
+
+1. **Sensor Data Acquisition**: Capturing data from cameras, LIDAR, IMU, and other sensors
+2. **Preprocessing**: Filtering, calibration, and normalization of raw sensor data
+3. **Feature Extraction**: Identifying relevant features from sensor data
+4. **Object Detection and Recognition**: Identifying objects in the environment
+5. **Scene Understanding**: Interpreting the 3D structure and semantics of the environment
+6. **State Estimation**: Determining the robot's position and orientation
+
+## Isaac Sim Perception Tools
+
+Isaac Sim provides several built-in perception capabilities:
+
+### Synthetic Data Generation
+```python
+# Example: Generating synthetic RGB and depth data
+import omni
+from omni.isaac.core import World
+from omni.isaac.sensor import Camera
+
+# Create a camera in the scene
+camera = Camera(
+    prim_path="/World/Camera",
+    position=np.array([0.0, 0.0, 1.0]),
+    orientation=rotations.gf_quat_to_np_array([1, 0, 0, 0])
+)
+
+# Capture RGB and depth images
+rgb_image = camera.get_rgb()
+depth_image = camera.get_depth()
+```
+
+### Computer Vision Tasks
+Isaac Sim integrates with NVIDIA's AI tools for various computer vision tasks:
+
+- **Object Detection**: Using Isaac ROS Detection NITROS
+- **Semantic Segmentation**: Pixel-level scene understanding
+- **Pose Estimation**: Determining object poses in 3D space
+- **Optical Flow**: Motion estimation between frames
+
+## Demo Scene: Object Recognition in Warehouse Environment
+
+Let's create a perception pipeline for a humanoid robot operating in a warehouse environment:
+
+### 1. Setting up the Scene
+```python
+# Create a warehouse environment with objects to detect
+import omni
+from omni.isaac.core import World
+from omni.isaac.core.utils.stage import add_reference_to_stage
+from omni.isaac.core.utils.nucleus import get_assets_root_path
+
+# Create world and add warehouse assets
+world = World(stage_units_in_meters=1.0)
+
+# Add warehouse environment
+assets_root_path = get_assets_root_path()
+warehouse_path = assets_root_path + "/Isaac/Environments/Simple_Warehouse/warehouse.usd"
+add_reference_to_stage(warehouse_path, "/World/Warehouse")
+```
+
+### 2. Object Detection Pipeline
+```python
+# Example perception pipeline for detecting objects
+from omni.isaac.core.utils.prims import get_prim_at_path
+from omni.vision.sensors import Camera
+
+class PerceptionPipeline:
+    def __init__(self):
+        self.camera = Camera(
+            prim_path="/World/Robot/Camera",
+            frequency=30,
+            resolution=(640, 480)
+        )
+
+    def detect_objects(self, image):
+        # In a real implementation, this would run an object detection model
+        # For simulation, we'll use Isaac Sim's ground truth
+        detections = self.get_ground_truth_detections()
+        return detections
+
+    def get_ground_truth_detections(self):
+        # Use Isaac Sim's ground truth annotation system
+        # This provides perfect detection for training data
+        return {
+            "objects": [
+                {"name": "box1", "bbox": [100, 100, 200, 200], "class": "cardboard_box"},
+                {"name": "pallet", "bbox": [300, 150, 450, 300], "class": "wooden_pallet"}
+            ]
+        }
+```
+
+### 3. Integration with ROS 2
+```python
+# Publish perception results to ROS 2 topics
+import rclpy
+from sensor_msgs.msg import Image, CameraInfo
+from vision_msgs.msg import Detection2DArray, ObjectHypothesisWithPose
+
+class IsaacPerceptionROS:
+    def __init__(self):
+        self.node = rclpy.create_node('isaac_perception_node')
+        self.image_pub = self.node.create_publisher(Image, '/camera/rgb/image_raw', 10)
+        self.detection_pub = self.node.create_publisher(Detection2DArray, '/detections', 10)
+
+    def publish_detection(self, detections):
+        detection_msg = Detection2DArray()
+        detection_msg.header.stamp = self.node.get_clock().now().to_msg()
+        detection_msg.header.frame_id = 'camera_frame'
+
+        for detection in detections['objects']:
+            detection_2d = Detection2D()
+            detection_2d.bbox.center.x = (detection['bbox'][0] + detection['bbox'][2]) / 2
+            detection_2d.bbox.center.y = (detection['bbox'][1] + detection['bbox'][3]) / 2
+            detection_2d.bbox.size_x = detection['bbox'][2] - detection['bbox'][0]
+            detection_2d.bbox.size_y = detection['bbox'][3] - detection['bbox'][1]
+
+            hypothesis = ObjectHypothesisWithPose()
+            hypothesis.id = detection['class']
+            hypothesis.score = 0.95  # Perfect detection in simulation
+            detection_2d.results.append(hypothesis)
+
+            detection_msg.detections.append(detection_2d)
+
+        self.detection_pub.publish(detection_msg)
+```
+
+## Domain Randomization for Robust Perception
+
+To make perception systems robust to real-world variations, Isaac Sim provides domain randomization capabilities:
+
+```python
+# Example of domain randomization
+from omni.isaac.core.utils.prims import randomize_light_properties
+from omni.isaac.core.utils.stage import get_stage_units
+
+# Randomize lighting conditions
+randomize_light_properties(
+    prim_path="/World/Light",
+    intensity_range=(100, 1000),
+    color_range=((0.8, 0.8, 0.8), (1.2, 1.2, 1.2))
+)
+
+# Randomize object textures and materials
+# This helps create robust models that work under various conditions
+```
+
+## Performance Optimization
+
+For efficient perception pipelines:
+
+- Use Isaac Sim's GPU-accelerated rendering for synthetic data generation
+- Implement proper batching for neural network inference
+- Optimize sensor update rates based on task requirements
+- Use level-of-detail (LOD) techniques for complex scenes
+
+:::tip
+Start with simple perception tasks and gradually increase complexity. Use Isaac Sim's ground truth data to validate your perception algorithms before deploying to real robots.
+:::
+
+:::info
+Isaac Sim's synthetic data generation capabilities can produce thousands of training examples per hour, significantly accelerating the development of perception systems for robotics applications.
+:::

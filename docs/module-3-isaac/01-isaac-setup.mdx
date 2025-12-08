@@ -1,0 +1,101 @@
+---
+id: 01-isaac-setup
+title: Isaac Sim Setup
+sidebar_position: 1
+---
+
+# Isaac Sim Setup
+
+This section provides a comprehensive guide to setting up NVIDIA Isaac Sim for developing AI-powered humanoid robots, covering system requirements, installation process, and initial configuration.
+
+## System Requirements
+
+### Hardware Requirements
+- NVIDIA GPU with RTX architecture (RTX 30xx/40xx series recommended)
+- At least 16GB system RAM (32GB+ recommended for complex scenes)
+- 20GB+ free disk space
+- CPU with 8+ cores for optimal performance
+
+### Software Requirements
+- Ubuntu 20.04 LTS or 22.04 LTS
+- NVIDIA GPU drivers (version 520+)
+- CUDA 11.8 or later
+- Docker (optional, for containerized deployment)
+
+## Installation Methods
+
+### Method 1: Isaac Sim Launcher (Recommended)
+1. Download the Isaac Sim Launcher from NVIDIA Developer website
+2. Extract the archive: `tar -xf isaac_sim-*.tar.gz`
+3. Run the setup: `./isaac-sim-launcher.sh`
+4. Follow the GUI installation process
+
+### Method 2: Docker Installation
+```bash
+# Pull the Isaac Sim Docker image
+docker pull nvcr.io/nvidia/isaac-sim:latest
+
+# Run Isaac Sim container
+docker run --gpus all -it --rm \
+  --network=host \
+  --env="DISPLAY" \
+  --env="QT_X11_NO_MITSHM=1" \
+  --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+  --volume="/tmp/.docker.xauth:/tmp/.docker.xauth:rw" \
+  --runtime=nvidia \
+  --env="NVIDIA_VISIBLE_DEVICES=all" \
+  --env="NVIDIA_DRIVER_CAPABILITIES=all" \
+  nvcr.io/nvidia/isaac-sim:latest
+```
+
+## Initial Configuration
+
+### Setting up Environment Variables
+```bash
+# Add to your ~/.bashrc
+export ISAACSIM_PATH=/path/to/isaac-sim
+export PYTHONPATH=$ISAACSIM_PATH/python:$PYTHONPATH
+```
+
+### Verifying Installation
+```bash
+# Test the installation
+cd $ISAACSIM_PATH
+python -c "import omni; print('Isaac Sim successfully imported!')"
+```
+
+## Integration with ROS 2
+
+To enable ROS 2 integration with Isaac Sim:
+
+1. Install the Isaac ROS packages:
+```bash
+sudo apt update
+sudo apt install ros-humble-isaac-ros-*  # or appropriate ROS 2 version
+```
+
+2. Source the ROS 2 environment:
+```bash
+source /opt/ros/humble/setup.bash  # or your ROS 2 installation
+source $ISAACSIM_PATH/setup_bash.sh
+```
+
+## First Launch
+
+To launch Isaac Sim for the first time:
+```bash
+# Using the launcher
+./isaac-sim-launcher.sh
+
+# Or directly
+cd $ISAACSIM_PATH
+./python.sh -m omni.isaac.kit --enable-omni.kit.window.viewport --exec apps/omni.isaac.sim.python.kpug.py
+```
+
+:::tip
+For optimal performance, ensure your GPU drivers are up to date and that you have sufficient VRAM for the scenes you plan to simulate. Consider using a dedicated GPU for Isaac Sim when possible.
+:::
+
+:::info
+Isaac Sim 5.1+ introduces improved USD support, enhanced physics simulation, and better integration with NVIDIA's AI tools, making it ideal for developing complex humanoid robot behaviors.
+:::

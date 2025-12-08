@@ -1,0 +1,198 @@
+---
+id: 01-whisper-gpt-stub
+title: Whisper + GPT-4o-mini Integration
+sidebar_position: 1
+---
+
+# Whisper + GPT-4o-mini Integration
+
+This section provides a lightweight alternative to large VLA models, demonstrating how to combine OpenAI's Whisper for speech recognition and GPT-4o-mini for language understanding to create a functional voice-controlled humanoid robot interface.
+
+## Voice Command Processing Pipeline
+
+The Whisper + GPT-4o-mini approach creates a voice-controlled robot interface that can understand natural language commands and translate them into robot actions:
+
+### 1. Speech Recognition with Whisper
+```python
+import openai
+import rospy
+from std_msgs.msg import String
+from geometry_msgs.msg import Twist
+
+class VoiceCommandProcessor:
+    def __init__(self):
+        # Initialize ROS node
+        rospy.init_node('voice_command_processor')
+
+        # Publisher for robot commands
+        self.cmd_vel_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+
+        # Initialize OpenAI client
+        self.client = openai.OpenAI(api_key=rospy.get_param('openai_api_key'))
+
+        # Audio recording setup
+        self.recording = False
+
+    def transcribe_speech(self, audio_file_path):
+        """Transcribe speech to text using Whisper"""
+        with open(audio_file_path, "rb") as audio_file:
+            transcript = self.client.audio.transcriptions.create(
+                model="whisper-1",
+                file=audio_file
+            )
+        return transcript.text
+```
+
+### 2. Natural Language Understanding with GPT-4o-mini
+```python
+    def parse_command(self, text_command):
+        """Parse natural language command and extract robot actions"""
+        prompt = f"""
+        You are a robot command interpreter. Convert the following human command into robot actions.
+        Return only a JSON object with robot actions in the following format:
+        {{
+            "action": "move_forward|move_backward|turn_left|turn_right|stop|pick_up|put_down|speak",
+            "parameters": {{"distance": 1.0, "angle": 90, "object": "item_name", "message": "text_to_speak"}},
+            "confidence": 0.8
+        }}
+
+        Human command: "{text_command}"
+
+        Robot command:
+        """
+
+        response = self.client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.1
+        )
+
+        import json
+        try:
+            # Extract JSON from response
+            response_text = response.choices[0].message.content
+            # Find JSON in response
+            start_idx = response_text.find('{')
+            end_idx = response_text.rfind('}') + 1
+            json_str = response_text[start_idx:end_idx]
+            command_data = json.loads(json_str)
+            return command_data
+        except:
+            # Default response if parsing fails
+            return {
+                "action": "speak",
+                "parameters": {"message": "I didn't understand that command."},
+                "confidence": 0.5
+            }
+```
+
+### 3. Robot Action Execution
+```python
+    def execute_command(self, command_data):
+        """Execute parsed command on the robot"""
+        action = command_data["action"]
+        params = command_data.get("parameters", {})
+        confidence = command_data.get("confidence", 0.5)
+
+        # Only execute if confidence is high enough
+        if confidence < 0.7:
+            self.speak("I'm not confident about this command. Please repeat.")
+            return
+
+        cmd_vel = Twist()
+
+        if action == "move_forward":
+            cmd_vel.linear.x = 0.5  # m/s
+        elif action == "move_backward":
+            cmd_vel.linear.x = -0.5
+        elif action == "turn_left":
+            cmd_vel.angular.z = 0.5  # rad/s
+        elif action == "turn_right":
+            cmd_vel.angular.z = -0.5
+        elif action == "stop":
+            cmd_vel = Twist()  # zero velocities
+        elif action == "speak":
+            self.speak(params.get("message", "Hello!"))
+            return
+
+        # Publish command to robot
+        self.cmd_vel_pub.publish(cmd_vel)
+
+    def speak(self, message):
+        """Make the robot speak a message"""
+        # Publish to text-to-speech topic
+        tts_pub = rospy.Publisher('/tts', String, queue_size=10)
+        tts_pub.publish(String(data=message))
+```
+
+## Complete Example Implementation
+```python
+def main():
+    processor = VoiceCommandProcessor()
+
+    # Simulate receiving voice commands
+    while not rospy.is_shutdown():
+        # In a real implementation, this would come from microphone
+        # For this example, we'll simulate voice input
+        audio_file = "/path/to/voice/command.wav"
+
+        # Transcribe speech
+        text_command = processor.transcribe_speech(audio_file)
+        print(f"Heard: {text_command}")
+
+        # Parse command
+        command_data = processor.parse_command(text_command)
+        print(f"Parsed: {command_data}")
+
+        # Execute command
+        processor.execute_command(command_data)
+
+        rospy.sleep(1.0)
+
+if __name__ == '__main__':
+    main()
+```
+
+## Integration with ROS 2
+
+To integrate this voice control system with ROS 2:
+
+```python
+# Create a launch file for the voice command system
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        Node(
+            package='voice_control',
+            executable='voice_command_processor',
+            name='voice_command_processor',
+            parameters=[
+                {'openai_api_key': 'your-api-key-here'}
+            ]
+        )
+    ])
+```
+
+## Advantages of This Approach
+
+- **Accessibility**: Works on modest hardware compared to large VLA models
+- **Flexibility**: Can be customized for specific robot platforms
+- **Cost-effective**: Uses cloud APIs rather than requiring expensive local hardware
+- **Rapid prototyping**: Quick to implement and test voice control capabilities
+
+## Limitations
+
+- **Latency**: Network dependency introduces delays
+- **Cost**: API usage costs for large-scale deployment
+- **Privacy**: Voice data sent to cloud services
+- **Connectivity**: Requires stable internet connection
+
+:::tip
+For production deployment, consider implementing local speech recognition and language models to reduce latency and improve privacy. The Whisper + GPT-4o-mini approach is ideal for prototyping and proof-of-concept development.
+:::
+
+:::info
+This approach demonstrates how to create a functional voice-controlled robot interface without requiring the computational resources needed for state-of-the-art VLA models like OpenVLA-7B.
+:::

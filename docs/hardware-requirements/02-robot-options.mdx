@@ -1,0 +1,339 @@
+---
+id: 02-robot-options
+title: Robot Hardware Options
+sidebar_position: 2
+---
+
+# Robot Hardware Options
+
+This section explores various humanoid robot platforms and hardware options available for implementing the concepts learned in this textbook, comparing different approaches and their trade-offs. Choosing the right robot platform is crucial for successful humanoid robotics development, affecting everything from development complexity to final capabilities.
+
+## Commercial Humanoid Platforms
+
+### NAO by SoftBank Robotics
+
+NAO is one of the most popular humanoid robots for research and education:
+
+| Specification | Details |
+|---------------|---------|
+| Height | 58 cm |
+| Weight | 5.2 kg |
+| Degrees of Freedom | 25 |
+| Sensors | 2 cameras, 2 microphones, 9 tactile sensors, 2 ultrasound sensors |
+| Computing | Intel Atom Z3745, 1.33 GHz quad-core |
+| OS | NAOqi (based on Linux) |
+| Price | ~$8,000-12,000 |
+
+**Pros:**
+- Mature ecosystem with extensive documentation
+- ROS support available
+- Proven platform for research and education
+- Good community support
+
+**Cons:**
+- Discontinued as of 2023
+- Limited computational power for advanced AI
+- Expensive for the capabilities provided
+
+### Pepper by SoftBank Robotics
+
+Pepper is a more advanced humanoid platform focused on human interaction:
+
+| Specification | Details |
+|---------------|---------|
+| Height | 120 cm |
+| Weight | 28 kg |
+| Degrees of Freedom | 20 |
+| Sensors | 3D camera, 2D camera, 4 microphones, touch sensors |
+| Computing | Intel Core i3, 2.2 GHz |
+| OS | NAOqi (based on Linux) |
+| Price | ~$20,000-30,000 |
+
+**Pros:**
+- Advanced human interaction capabilities
+- Good for social robotics research
+- Multiple sensors for perception
+- Commercial support available
+
+**Cons:**
+- Expensive for research applications
+- Limited mobility (wheeled base)
+- Discontinued as of 2022
+
+### Atlas by Boston Dynamics
+
+Atlas represents the state-of-the-art in humanoid robotics:
+
+| Specification | Details |
+|---------------|---------|
+| Height | 180 cm |
+| Weight | 82 kg |
+| Degrees of Freedom | 28+ |
+| Sensors | LIDAR, stereo cameras, IMU |
+| Computing | Custom high-performance computer |
+| OS | Custom real-time OS |
+| Price | Not commercially available |
+
+**Pros:**
+- Advanced dynamic locomotion capabilities
+- High payload capacity
+- Research-grade platform
+- Demonstrates cutting-edge capabilities
+
+**Cons:**
+- Not commercially available
+- Extremely expensive
+- Requires specialized expertise
+- Limited documentation
+
+## Open Source Humanoid Platforms
+
+### Poppy Project
+
+The Poppy Project offers open-source 3D-printed humanoid robots:
+
+| Model | Poppy Humanoid | Poppy Torso | Poppy Ergo Jr |
+|-------|----------------|-------------|---------------|
+| Height | 80-100 cm | 40 cm | 20 cm |
+| Weight | 2-3 kg | 1 kg | 0.5 kg |
+| DOF | 24-26 | 6-12 | 6 |
+| Actuators | Dynamixel servos | Dynamixel servos | Dynamixel servos |
+| Price | ~$1,500-3,000 | ~$800-1,200 | ~$300-500 |
+
+**Pros:**
+- Open-source design files
+- 3D-printable parts
+- Active research community
+- Educational focus
+- Affordable compared to commercial options
+
+**Cons:**
+- Requires assembly and tuning
+- Limited payload capacity
+- Less robust than commercial robots
+- Requires 3D printing capabilities
+
+### InMoov
+
+InMoov is a DIY humanoid robot project:
+
+| Specification | Details |
+|---------------|---------|
+| Height | 140-180 cm (life-size) |
+| Weight | 3-5 kg (excluding base) |
+| Degrees of Freedom | 30+ (scalable) |
+| Actuators | Servo motors (various types) |
+| Computing | Raspberry Pi or Arduino |
+| OS | Various (ROS, MyRobotLab) |
+| Price | ~$1,000-2,000 (materials only) |
+
+**Pros:**
+- Completely open-source
+- Life-size humanoid
+- Large community
+- Highly customizable
+- Detailed documentation
+
+**Cons:**
+- Requires significant assembly time
+- Mechanical design challenges
+- No official support
+- Requires 3D printing and electronics skills
+
+### Darwin OP
+
+Darwin OP is a research-focused humanoid platform:
+
+| Specification | Details |
+|---------------|---------|
+| Height | 46 cm |
+| Weight | 2.9 kg |
+| Degrees of Freedom | 20 |
+| Sensors | Camera, IMU, gyroscope |
+| Computing | Intel Atom Z530, 1.6 GHz |
+| OS | ROS compatible |
+| Price | ~$3,000-5,000 |
+
+**Pros:**
+- ROS compatibility
+- Research-focused design
+- Good documentation
+- Active development community
+
+**Cons:**
+- Discontinued
+- Limited availability
+- Outdated hardware
+- Expensive for the specifications
+
+## Custom Build Options
+
+### Using Dynamixel Actuators
+
+Dynamixel servos from Robotis are popular for custom builds:
+
+| Model | AX-12A | RX-28 | RX-64 | MX-28 | MX-64 | MX-106 |
+|-------|--------|-------|-------|-------|-------|--------|
+| Torque (stall) | 1.5 Nm | 2.5 Nm | 4.2 Nm | 2.5 Nm | 6.0 Nm | 8.4 Nm |
+| Speed | 37 RPM | 48 RPM | 53 RPM | 55 RPM | 51 RPM | 45 RPM |
+| Price | ~$40 | ~$100 | ~$150 | ~$120 | ~$200 | ~$300 |
+| Feedback | Position | Position, Speed | Position, Speed | Position, Speed, Load | Position, Speed, Load | Position, Speed, Load |
+
+**Pros:**
+- Precise control with built-in feedback
+- Daisychain communication
+- Good documentation and support
+- Various torque options available
+
+**Cons:**
+- Expensive for multiple actuators
+- Limited to Robotis ecosystem
+- Protocol limitations
+- Higher latency than direct control
+
+### Using QDD Actuators
+
+QDD (Quasi-Direct Drive) actuators offer high-performance options:
+
+| Type | QDD-100 | QDD-200 | QDD-500 |
+|------|---------|---------|---------|
+| Continuous Torque | 10 Nm | 20 Nm | 50 Nm |
+| Peak Torque | 30 Nm | 60 Nm | 150 Nm |
+| Gear Ratio | 90:1 | 90:1 | 90:1 |
+| Weight | 1.2 kg | 1.8 kg | 3.5 kg |
+| Price | ~$800 | ~$1,200 | ~$2,000 |
+
+**Pros:**
+- High torque density
+- Low backlash
+- Good for dynamic movements
+- Precise control
+
+**Cons:**
+- Very expensive
+- Requires custom control systems
+- Limited availability
+- Complex integration
+
+## DIY Approaches
+
+### 3D Printed Robot Kits
+
+Several companies offer pre-designed 3D printed robot kits:
+
+- **Lynxmotion**: Hexapod and biped kits with Arduino controllers
+- **Trossen Robotics**: PhantomX, ReactorX arm kits
+- **Robotis**: OP series with pre-designed frames
+
+### Custom Mechanical Design
+
+For advanced users, designing custom mechanical systems:
+
+- **CAD Software**: Fusion 360, SolidWorks, FreeCAD
+- **Manufacturing**: 3D printing, CNC machining, laser cutting
+- **Materials**: PLA/PETG for 3D printing, aluminum for structural elements
+- **Joints**: Ball bearings, bushings, custom gears
+
+## Comparison Matrix
+
+| Platform | Cost | DOF | Computing | Support | Best Use Case |
+|----------|------|-----|-----------|---------|---------------|
+| NAO | High | 25 | Limited | Excellent | Education, research |
+| Poppy | Medium | 24+ | Custom | Good | Research, education |
+| InMoov | Low | 30+ | Custom | Good | DIY, customization |
+| Custom (Dynamixel) | High | Variable | Custom | Good | Specialized tasks |
+| QDD Build | Very High | Variable | Custom | Limited | High-performance |
+
+## Budget Considerations
+
+### Entry-Level Options ($500-2,000)
+- Arduino-based biped robots
+- Simple servo-based designs
+- InMoov or Poppy builds
+- Educational kits
+
+### Mid-Range Options ($2,000-10,000)
+- Used NAO robots
+- Custom builds with quality actuators
+- Research platforms like Darwin OP
+- Pre-designed kits with good DOF
+
+### High-End Options ($10,000+)
+- New commercial robots
+- Custom builds with premium actuators
+- Professional research platforms
+- Industrial-grade systems
+
+## Integration Considerations
+
+### ROS Compatibility
+
+Ensure your chosen platform supports ROS 2:
+- Check for existing ROS packages
+- Verify communication protocols
+- Consider custom driver development
+- Evaluate sensor integration complexity
+
+### Sensor Integration
+
+Plan for necessary sensors:
+- Cameras for vision
+- IMU for balance
+- Force/torque sensors
+- Tactile sensors for manipulation
+
+### Power Management
+
+Consider power requirements:
+- Battery selection and placement
+- Power distribution systems
+- Battery management circuits
+- Operational time requirements
+
+## Development Timeline
+
+### Ready-to-Use Platforms
+- **Time to operation**: 1-2 weeks
+- **Customization time**: 2-6 months
+- **Best for**: Focusing on software/AI rather than hardware
+
+### Kit-Based Platforms
+- **Assembly time**: 1-4 weeks
+- **Calibration time**: 1-2 weeks
+- **Best for**: Learning both hardware and software
+
+### Custom Builds
+- **Design time**: 3-6 months
+- **Assembly time**: 1-3 months
+- **Tuning time**: 3-6 months
+- **Best for**: Specialized applications
+
+## Recommendations by Use Case
+
+### Educational Institutions
+- **Budget**: Start with Poppy or used NAO
+- **Focus**: Software development and AI concepts
+- **Consider**: Multiple smaller robots vs. one large one
+
+### Research Labs
+- **Budget**: Custom builds with quality components
+- **Focus**: Specific research questions
+- **Consider**: Modularity and extensibility
+
+### Hobbyists
+- **Budget**: InMoov or simple custom builds
+- **Focus**: Learning and experimentation
+- **Consider**: Community support and documentation
+
+### Commercial Development
+- **Budget**: Established platforms or custom solutions
+- **Focus**: Reliability and performance
+- **Consider**: Support, warranty, and long-term availability
+
+:::tip
+Start with an existing platform to learn the fundamentals before attempting custom builds. The mechanical design of humanoid robots is complex and time-consuming.
+:::
+
+:::info
+The choice of robot platform significantly impacts your development timeline and capabilities. Consider your specific goals, budget, and technical expertise when making this important decision.
+:::
