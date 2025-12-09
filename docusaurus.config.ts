@@ -18,7 +18,7 @@ const config: Config = {
   url: 'https://humanoidblueprint.ai',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/Humanoid-robotics-book/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
