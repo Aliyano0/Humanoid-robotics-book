@@ -1,3 +1,14 @@
+---
+title: RAG Chatbot for Humanoid Robotics Docusaurus Book
+emoji: 🤖
+colorFrom: purple
+colorTo: red
+sdk: docker
+runtime: huggingface
+pinned: false
+license: apache-2.0
+---
+
 # RAG Chatbot for Humanoid Robotics Docusaurus Book
 
 ## Overview
@@ -28,6 +39,18 @@ This project implements an integrated RAG (Retrieval-Augmented Generation) chatb
 - OpenRouter API key and endpoint URL
 - Qdrant Cloud account and API key
 - Neon Postgres database connection string
+
+## Hugging Face Spaces Configuration
+
+To deploy this application on Hugging Face Spaces, you'll need to set the following secrets in your Space settings:
+
+- `OPENROUTER_API_KEY`: Your OpenRouter API key
+- `OPENROUTER_URL`: Your OpenRouter base URL (default: https://openrouter.ai/api/v1)
+- `QDRANT_API_KEY`: Your Qdrant Cloud API key
+- `QDRANT_CLUSTER_ENDPOINT`: Your Qdrant Cloud cluster endpoint URL
+- `NEON_POSTGRES_URL`: Your Neon Postgres connection string
+
+The application is configured to run on Hugging Face Spaces with Docker runtime and will automatically start on the correct port.
 
 ## Setup
 
