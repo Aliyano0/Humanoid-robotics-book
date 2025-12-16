@@ -75,6 +75,14 @@ const config: Config = {
     ],
   ],
 
+  // Add the chatkit widget script to be loaded on all pages
+  scripts: [
+    {
+      src: '/Humanoid-robotics-book/chatkit-widget.js',
+      async: true,
+      defer: true,
+    },
+  ],
   themeConfig: {
     // Replace with your project's social card
     image: 'img/social-card.jpg',

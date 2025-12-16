@@ -1,0 +1,29 @@
+{
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile"
+  },
+  "deploy": {
+    "numInstances": 1,
+    "startCommand": "uvicorn src.main:app --host 0.0.0.0 --port $PORT",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 30
+  },
+  "variables": {
+    "OPENROUTER_API_KEY": {
+      "required": true
+    },
+    "OPENROUTER_URL": {
+      "required": true
+    },
+    "QDRANT_API_KEY": {
+      "required": true
+    },
+    "QDRANT_CLUSTER_ENDPOINT": {
+      "required": true
+    },
+    "NEON_POSTGRES_URL": {
+      "required": true
+    }
+  }
+}

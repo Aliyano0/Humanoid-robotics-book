@@ -1,22 +1,127 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+
 # Dependencies
-/node_modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Production
-/build
+# Docusaurus build artifacts (but keep docs/ which contains source content)
+.docusaurus/
+.cache/
+# Don't ignore docs/ - it contains textbook content
+
+# Production builds
 /dist
-*.log
 
-# Generated files
-.docusaurus
-.cache-loader
-
-# Misc
-.DS_Store
+# Environment variables and local configuration
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env.*.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.pyc
+*.pyo
+*.pyd
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test files
+.tests/
+test_*.py
+*_test.py
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local development files
+tmp/
+temp/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*~
+*.bak
+*.old
+*.orig
+
+# Additional Python dev tools
+.hypothesis/
+.coverage*
+.pytest_cache/
+.mypy_cache/
+
+# Docker and containers
+.dockerignore
+*.dockerignore
+.dockerenv
+
+# Deployment files
+# Note: Dockerfile (without extension) is intentionally NOT ignored as it's needed for Hugging Face Spaces
+Dockerfile.*        # Ignore Dockerfile with extensions (like Dockerfile.backup)
+docker-compose.*
+.deployment/
+.deploy/
+
+# Logs
+*.log
+logs/
+log/
+
+# Coverage reports
+coverage/
+htmlcov/
+.coverage*
+
+# Build outputs that aren't needed
+*.egg-info/
+*.egg
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Any other files that shouldn't be in the repo
+Thumbs.db
+ehthumbs.db
+Icon?
+.directory

@@ -1,0 +1,24 @@
+runtime:
+  cpu: "2"
+  memory: "8Gi"
+  accelerator: "none"
+
+variables:
+  - name: "PORT"
+    value: "8000"
+
+secrets:
+  - name: "OPENROUTER_API_KEY"
+    required: true
+  - name: "OPENROUTER_URL"
+    required: true
+  - name: "QDRANT_API_KEY"
+    required: true
+  - name: "QDRANT_CLUSTER_ENDPOINT"
+    required: true
+  - name: "NEON_POSTGRES_URL"
+    required: true
+
+hooks:
+  pre_start: "uv pip install -r requirements.txt"
+  post_start: "python -c \"import asyncio; from src.embed_book import embed_book_content; asyncio.run(embed_book_content())\""

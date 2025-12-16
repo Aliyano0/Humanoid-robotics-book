@@ -210,3 +210,10 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
 - Don't request more than 4 times within a minute. The request per minute is limited on my api key.
 - Use context7 mcp for docusaurus documentation. The link is https://docusaurus.io/docs
+
+## Active Technologies
+- Python 3.12+ + FastAPI 0.124.2, OpenAI SDK 2.11.0, Qdrant-client 1.16.1, psycopg 3.3.0, langchain-text-splitters 1.0.0, python-dotenv, uvicorn (002-rag-chatbot-humanoid-book)
+- Neon Serverless Postgres (for session/metadata storage), Qdrant Cloud (for vector embeddings) (002-rag-chatbot-humanoid-book)
+
+## Recent Changes
+- 002-rag-chatbot-humanoid-book: Added Python 3.12+ + FastAPI 0.124.2, OpenAI SDK 2.11.0, Qdrant-client 1.16.1, psycopg 3.3.0, langchain-text-splitters 1.0.0, python-dotenv, uvicorn

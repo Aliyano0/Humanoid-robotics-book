@@ -1,0 +1,16 @@
+{
+  "results": {
+    "health_endpoint": true,
+    "basic_chat": true,
+    "selected_text": true,
+    "session_continuity": true,
+    "rate_limiting": true,
+    "embedding_endpoint": true
+  },
+  "summary": {
+    "total_tests": 6,
+    "passed_tests": 6,
+    "failed_tests": 0,
+    "success_rate": 100.0
+  }
+}

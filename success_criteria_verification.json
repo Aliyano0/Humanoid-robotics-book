@@ -1,0 +1,34 @@
+{
+  "SC-001": {
+    "meets_criteria": true,
+    "details": "Health check passed with response time 0.30s"
+  },
+  "SC-002": {
+    "meets_criteria": true,
+    "details": "Accuracy rate: 100.00% (3/3 with citations)"
+  },
+  "SC-003": {
+    "meets_criteria": true,
+    "details": "Selected text functionality success rate: 100.00% (2/2 successful)"
+  },
+  "SC-004": {
+    "meets_criteria": false,
+    "details": "Multi-turn conversation success: 3/5 turns successful"
+  },
+  "SC-005": {
+    "meets_criteria": true,
+    "details": "System is operational and can handle queries"
+  },
+  "SC-006": {
+    "meets_criteria": true,
+    "details": "Average token count: 64.67 tokens per response"
+  },
+  "SC-007": {
+    "meets_criteria": true,
+    "details": "Content retrieval success: 33.33% (1/3 with citations)"
+  },
+  "SC-008": {
+    "meets_criteria": true,
+    "details": "Meaningful response rate: 100.00% (3/3 meaningful responses)"
+  }
+}

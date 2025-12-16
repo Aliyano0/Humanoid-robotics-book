@@ -1,0 +1,73 @@
+[project]
+name = "rag-chatbot-humanoid-book"
+version = "0.1.0"
+description = "RAG Chatbot for Humanoid Robotics Docusaurus Book"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [
+    {name = "Developer", email = "developer@example.com"}
+]
+
+dependencies = [
+    "fastapi>=0.124.2",
+    "uvicorn>=0.34.0",
+    "openai>=2.11.0",
+    "qdrant-client>=1.16.1",
+    "psycopg[binary]>=3.3.0",
+    "langchain-text-splitters>=1.0.0",
+    "python-dotenv>=1.0.1",
+    "pydantic>=2.10.3",
+    "pytest>=8.3.4",
+    "httpx>=0.28.1",
+    "slowapi>=0.1.9",
+    "tiktoken>=0.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.0.0",
+    "flake8>=7.0.0",
+    "mypy>=1.8.0",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.uv]
+dev-dependencies = [
+    "black>=24.0.0",
+    "flake8>=7.0.0",
+    "mypy>=1.8.0",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+skip-string-normalization = true
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[project.urls]
+Homepage = "https://github.com/your-username/rag-chatbot-humanoid-book"
+Repository = "https://github.com/your-username/rag-chatbot-humanoid-book"

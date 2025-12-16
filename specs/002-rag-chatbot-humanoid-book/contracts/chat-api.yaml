@@ -1,0 +1,143 @@
+# API Contract: RAG Chatbot for Humanoid Robotics Docusaurus Book
+
+## Overview
+This API provides a RAG-based chatbot interface for querying the Physical AI & Humanoid Robotics textbook. It handles user queries, retrieves relevant content, and generates contextual responses.
+
+## Base Path
+All endpoints are relative to `/api/v1` (or as configured in deployment)
+
+## Authentication
+No authentication required - anonymous sessions with session ID tracking
+
+## Endpoints
+
+### POST /chat
+Process user query and return AI-generated response based on book content
+
+#### Request
+```json
+{
+  "query": "string, required - The user's question or query",
+  "selected_text": "string, optional - Text selected by user on the page",
+  "session_id": "string, optional - Existing session ID for conversation continuity"
+}
+```
+
+#### Response
+```json
+{
+  "response": "string - AI-generated response to the query",
+  "session_id": "string - Session identifier for conversation continuity",
+  "citations": [
+    {
+      "file_path": "string - Path to the source document",
+      "section": "string - Section title where information was found",
+      "relevance_score": "number - Similarity score of the cited content (0.0-1.0)"
+    }
+  ],
+  "query_id": "string - Unique identifier for this query",
+  "response_id": "string - Unique identifier for this response",
+  "token_count": "integer - Number of tokens in the response",
+  "retrieved_chunks": "integer - Number of content chunks used to generate response"
+}
+```
+
+#### Error Responses
+- `400 Bad Request`: Invalid request format or missing required fields
+- `429 Too Many Requests`: Rate limit exceeded (10 requests per minute)
+- `500 Internal Server Error`: Server error during processing
+- `503 Service Unavailable`: Vector database or AI service unavailable
+
+#### Example Request
+```json
+{
+  "query": "Explain ROS 2 nodes",
+  "selected_text": "A ROS 2 node is an entity that uses ROS 2 to communicate with other nodes.",
+  "session_id": "session_abc123"
+}
+```
+
+#### Example Response
+```json
+{
+  "response": "In ROS 2, a node is a fundamental unit of a ROS program that communicates with other nodes. Nodes can publish messages to topics, subscribe to topics to receive messages, provide services, or call services. Each node runs within a namespace and has a unique name within that namespace. Nodes are implemented using client libraries like rclcpp for C++ or rclpy for Python.",
+  "session_id": "session_abc123",
+  "citations": [
+    {
+      "file_path": "/docs/ros2-concepts.md",
+      "section": "Understanding ROS 2 Nodes",
+      "relevance_score": 0.89
+    }
+  ],
+  "query_id": "query_def456",
+  "response_id": "response_ghi789",
+  "token_count": 42,
+  "retrieved_chunks": 2
+}
+```
+
+### POST /embed
+(Internal endpoint) Embed book content and store in vector database
+
+#### Request
+```json
+{
+  "file_path": "string - Path to the .md file to be embedded",
+  "content": "string - Content of the file to be chunked and embedded"
+}
+```
+
+#### Response
+```json
+{
+  "status": "string - Processing status (success/error)",
+  "chunks_processed": "integer - Number of chunks created and embedded",
+  "embedding_ids": "array of strings - IDs of created embeddings in vector database"
+}
+```
+
+### GET /health
+Check the health status of the service
+
+#### Response
+```json
+{
+  "status": "string - Overall service health (healthy/degraded/unavailable)",
+  "checks": {
+    "qdrant_connection": "boolean - Whether vector database is accessible",
+    "neon_connection": "boolean - Whether metadata database is accessible",
+    "openrouter_connection": "boolean - Whether AI service is accessible"
+  },
+  "timestamp": "string - ISO 8601 timestamp of the health check"
+}
+```
+
+## Rate Limiting
+- All endpoints are subject to rate limiting: 10 requests per minute per IP
+- Exceeding the limit returns a 429 status code with retry-after header
+- Rate limits apply per IP address to prevent abuse while allowing legitimate usage
+
+## Data Validation
+- Query text: 1-2000 characters
+- Selected text: 0-5000 characters (optional)
+- Session ID: Valid UUID format or null
+- Response tokens: Must be under 500 tokens (enforced by system)
+
+## Error Handling
+All error responses follow this format:
+```json
+{
+  "error": {
+    "code": "string - Error code",
+    "message": "string - Human-readable error message",
+    "details": "object - Additional error details when applicable"
+  }
+}
+```
+
+## Success Criteria Compliance
+- Response time: Under 10 seconds for typical requests (FR-010)
+- Token efficiency: Responses under 500 tokens (SC-006)
+- Content accuracy: Responses based on book content with citations (FR-002, FR-007)
+- Multi-turn support: Session persistence via session_id (FR-004)
+- Selected text handling: Priority context when provided (FR-003)
