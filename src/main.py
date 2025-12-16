@@ -34,7 +34,7 @@ app = FastAPI(title=config.APP_TITLE)
 # Add CORS middleware to allow requests from Docusaurus frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", ""],  # In production, replace with specific origin like ["http://localhost:3000"]
+    allow_origins=["http://localhost:3000", "https://aliyano0.github.io/Humanoid-robotics-book/"],  # In production, replace with specific origin like ["http://localhost:3000"]
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods (GET, POST, OPTIONS, etc.)
     allow_headers=["*"],  # Allow all headers

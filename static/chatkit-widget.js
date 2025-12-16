@@ -16,7 +16,7 @@
 
     // Configuration
     const CONFIG = {
-        backendUrl: window.CHATKIT_BACKEND_URL || 'http://localhost:8000',
+        backendUrl: window.CHATKIT_BACKEND_URL || "https://aliyan-a-book-hackathon.hf.space" || 'http://localhost:8000',
         position: 'bottom-right',
         title: 'Humanoid Robotics Assistant',
         subtitle: 'Ask me anything about the textbook!',
