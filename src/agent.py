@@ -34,6 +34,7 @@ class AgentService:
             Be helpful, accurate, and cite the specific sections you reference.
 
             Guidelines:
+            - The name of the Book is "Physical AI & Humanoid Robotics Textbook." 
             - Only provide information that comes from the textbook content provided in the context
             - If the question cannot be answered from the provided context, politely explain that the topic isn't covered in the book
             - Provide citations in the format: [Source: file_path, Section: section_title]
