@@ -16,7 +16,10 @@
 
     // Configuration
     const CONFIG = {
-        backendUrl: window.CHATKIT_BACKEND_URL || "https://aliyan-a-book-hackathon.hf.space" || 'http://localhost:8000',
+        backendUrl: window.BACKEND_URL || "https://aliyan-a-book-hackathon.hf.space" || 'http://localhost:8000',
+        signupPage: '/Humanoid-robotics-book/signup',
+        loginPage: '/Humanoid-robotics-book/login',
+        profilePage: '/Humanoid-robotics-book/profile',
         position: 'bottom-right',
         title: 'Humanoid Robotics Assistant',
         subtitle: 'Ask me anything about the textbook!',
@@ -24,7 +27,6 @@
         primaryColor: '#3b82f6',
         secondaryColor: '#f3f4f6'
     };
-
     // State management
     let sessionId = localStorage.getItem('chatbot-session-id') || generateUUID();
     localStorage.setItem('chatbot-session-id', sessionId);
@@ -234,8 +236,21 @@
         });
     }
 
+    // Check if user is authenticated by looking for auth token in localStorage
+    function isAuthenticated() {
+        const token = localStorage.getItem('auth_token');
+        return !!token;
+    }
+
     // Toggle chat window visibility
     function toggleChatWindow() {
+        // Check authentication before opening chat
+        if (!isAuthenticated()) {
+            // Show authentication prompt instead of chat window
+            showAuthPrompt();
+            return;
+        }
+
         if (chatWindow.style.display === 'flex') {
             closeChatWindow();
         } else {
@@ -256,6 +271,12 @@
 
     // Send message to backend
     async function sendMessage() {
+        // Check authentication before sending message
+        if (!isAuthenticated()) {
+            showAuthPrompt();
+            return;
+        }
+
         const message = messageInput.value.trim();
         if (!message) return;
 
@@ -270,12 +291,19 @@
             // Show typing indicator
             const typingIndicator = addMessage('assistant', 'Thinking...');
 
-            // Send to backend
+            // Send to backend with authentication token if available
+            const token = localStorage.getItem('auth_token');
+            const headers = {
+                'Content-Type': 'application/json',
+            };
+
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
             const response = await fetch(`${CONFIG.backendUrl}/api/v1/chat`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: headers,
                 body: JSON.stringify({
                     query: message,
                     selected_text: selectedText || null,
@@ -284,6 +312,11 @@
             });
 
             if (!response.ok) {
+                // Check if it's an authentication error
+                if (response.status === 401 || response.status === 403) {
+                    showAuthPrompt();
+                    return;
+                }
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
@@ -415,6 +448,80 @@
 
     // Also initialize when page is fully loaded (for SPAs)
     window.addEventListener('load', initializeWidget);
+
+    // Show authentication prompt when user tries to access chat without being authenticated
+    function showAuthPrompt() {
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.id = 'chatkit-auth-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        `;
+
+        // Create auth prompt container
+        const authContainer = document.createElement('div');
+        authContainer.className = 'chatkit-auth-prompt';
+        authContainer.style.cssText = `
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        `;
+
+        // Create auth prompt content
+        authContainer.innerHTML = `
+            <h3 style="margin: 0 0 16px; color: #1f2937;">Authentication Required</h3>
+            <p style="margin: 0 0 20px; color: #4b5563;">You need to be logged in to use the chatbot feature.</p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <a href="/login" style="
+                    display: block;
+                    padding: 12px;
+                    background-color: ${CONFIG.primaryColor};
+                    color: white;
+                    text-decoration: none;
+                    border-radius: 6px;
+                    font-weight: 500;
+                ">Log In</a>
+                <a href="/signup" style="
+                    display: block;
+                    padding: 12px;
+                    background-color: #f3f4f6;
+                    color: #374151;
+                    text-decoration: none;
+                    border-radius: 6px;
+                    font-weight: 500;
+                ">Sign Up</a>
+            </div>
+            <button id="close-auth-prompt" style="
+                margin-top: 16px;
+                padding: 8px 16px;
+                background: none;
+                border: none;
+                color: #6b7280;
+                cursor: pointer;
+                font-size: 14px;
+            ">Cancel</button>
+        `;
+
+        authContainer.querySelector('#close-auth-prompt').addEventListener('click', function() {
+            document.body.removeChild(overlay);
+        });
+
+        overlay.appendChild(authContainer);
+        document.body.appendChild(overlay);
+    }
 
     // Make available globally
     window.ChatKit = {

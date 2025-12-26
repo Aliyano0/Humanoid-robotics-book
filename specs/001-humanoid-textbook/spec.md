@@ -1,8 +1,9 @@
 # Feature Specification: Beginner Humanoid Textbook
 
-**Feature Branch**: `001-beginner-humanoid-textbook`
+**Feature Branch**: `001-humanoid-textbook`
 **Created**: 2025-12-08
-**Status**: Draft
+**Status**: Implemented
+**Last Updated**: 2025-12-26
 **Input**: User description: "Target audience:
 Undergraduate and graduate students (CS, engineering, robotics enthusiasts) who are new to physical AI and humanoid robotics. Assumes only basic Python knowledge. This is a beginner-friendly, exciting overview – not a deep technical capstone. The goal is inspiration + conceptual clarity + simple hands-on examples.
 
@@ -106,3 +107,25 @@ Undergraduate and graduate students (CS, engineering, robotics enthusiasts) who 
 - **SC-006**: All verbatim sections ("Why Physical AI Matters", Learning Outcomes, Weekly Breakdown, Assessments, Hardware Requirements) are included unchanged.
 - **SC-007**: The textbook contains exactly four modules in the specified fixed order.
 - **SC-008**: The total word count (light, skimmable, lots of diagrams and simple code) is between 12,000–18,000 words.
+
+## Homepage UI Requirements
+
+### Functional Requirements (Homepage)
+
+- **FR-018**: The homepage MUST have a clean, modern hero section with the book title "The Humanoid Blueprint" and subtitle "Physical AI & Humanoid Robotics".
+- **FR-019**: The homepage MUST include a "Start Learning" button that links to the introduction section (`/docs/intro/00-index`).
+- **FR-020**: The homepage MUST include a "View on GitHub" button linking to the repository.
+- **FR-021**: The homepage MUST display a features section highlighting: Beginner Friendly, Hands-On Code, and Practical Focus.
+- **FR-022**: The homepage MUST display a module grid with all 8 sections (Introduction, Module 1-4, Capstone, Hardware Requirements, Glossary) as clickable cards.
+- **FR-023**: Each module card MUST include an icon, title, description, and link to the corresponding docs section.
+- **FR-024**: The homepage MUST be responsive and work on mobile, tablet, and desktop devices.
+- **FR-025**: The homepage MUST support both light and dark themes.
+
+### Implementation Status
+
+- [x] Hero section with title, subtitle, description, and CTA buttons
+- [x] Features section (3-column grid)
+- [x] Module grid (8 cards linking to all sections)
+- [x] Responsive design (mobile, tablet, desktop)
+- [x] Dark mode support
+- [x] Clean navbar integration

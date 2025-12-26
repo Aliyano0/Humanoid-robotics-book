@@ -10,13 +10,13 @@ load_dotenv()
 
 class DatabaseConnection:
     def __init__(self):
-        self.connection_string = os.getenv("NEON_POSTGRES_URL")
+        self.connection_string = os.getenv("NEON_DATABASE_URL")
         self.conn: Optional[psycopg.Connection] = None
 
     def connect(self):
         """Create a connection to Neon Postgres"""
         if not self.connection_string:
-            raise ValueError("NEON_POSTGRES_URL environment variable is not set")
+            raise ValueError("NEON_DATABASE_URL environment variable is not set")
 
         self.conn = psycopg.connect(
             conninfo=self.connection_string,
@@ -82,6 +82,30 @@ def init_db_schema():
                 );
             """)
 
+            # Create users table for authentication
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    id VARCHAR(100) PRIMARY KEY,
+                    email VARCHAR(255) UNIQUE NOT NULL,
+                    name VARCHAR(255) NOT NULL,
+                    password_hash TEXT NOT NULL,
+                    background_info JSONB,
+                    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                    email_verified_at TIMESTAMP WITH TIME ZONE
+                );
+            """)
+
+            # Create auth_sessions table for session management
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS auth_sessions (
+                    token TEXT PRIMARY KEY,
+                    user_id VARCHAR(100) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                    expires_at TIMESTAMP WITH TIME ZONE NOT NULL
+                );
+            """)
+
             # Create indexes
             cursor.execute("""
                 -- Index for metadata lookups by file path
@@ -101,6 +125,22 @@ def init_db_schema():
             cursor.execute("""
                 -- Index for sessions by user_id and active status
                 CREATE INDEX IF NOT EXISTS idx_sessions_user_active ON sessions(user_id, is_active);
+            """)
+
+            # Indexes for authentication tables
+            cursor.execute("""
+                -- Index for users by email (for login lookup)
+                CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+            """)
+
+            cursor.execute("""
+                -- Index for auth_sessions by user_id
+                CREATE INDEX IF NOT EXISTS idx_auth_sessions_user_id ON auth_sessions(user_id);
+            """)
+
+            cursor.execute("""
+                -- Index for auth_sessions by expires_at (for cleanup)
+                CREATE INDEX IF NOT EXISTS idx_auth_sessions_expires_at ON auth_sessions(expires_at);
             """)
 
             print("Database schema initialized successfully")

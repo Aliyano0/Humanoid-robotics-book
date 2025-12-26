@@ -1,7 +1,7 @@
 # Feature Tasks: Beginner Humanoid Textbook
 
-**Feature**: `001-beginner-humanoid-textbook` | **Date**: 2025-12-08 | **Spec**: /specs/001-beginner-humanoid-textbook/spec.md
-**Input**: Feature specification from `/specs/001-beginner-humanoid-textbook/spec.md`
+**Feature**: `001-humanoid-textbook` | **Date**: 2025-12-08 | **Last Updated**: 2025-12-26 | **Spec**: /specs/001-humanoid-textbook/spec.md
+**Input**: Feature specification from `/specs/001-humanoid-textbook/spec.md`
 **Output**: Detailed, executable task list for implementation
 
 ## Summary
@@ -122,3 +122,24 @@ Independent Test: A beginner student can successfully follow the course to under
 - [x] T053 Verify all verbatim sections are exact matches against original brief
 - [x] T054 Ensure all pages utilize `:::tip`, `:::info`, `:::danger` callouts
 - [x] T055 Verify overall beginner-friendliness and excitement factor for the target audience
+
+---
+
+## Phase 5: Homepage UI (Added 2025-12-26)
+
+This phase focuses on creating a custom homepage UI to replace the default Docusaurus homepage.
+
+- [x] T056 Create HeroSection component with title, subtitle, description, and CTA buttons
+- [x] T057 Create FeaturesSection component with 3-column grid (Beginner Friendly, Hands-On Code, Practical Focus)
+- [x] T058 Create ModulesSection component with module grid displaying all 8 sections
+- [x] T059 Create ModuleCard component with icon, title, description, and link
+- [x] T060 Implement responsive CSS for mobile, tablet, and desktop breakpoints
+- [x] T061 Implement dark mode support for homepage components
+- [x] T062 Remove broken client-redirects plugin configuration from docusaurus.config.ts
+- [x] T063 Verify Docusaurus build succeeds with new homepage
+
+### Files Modified
+
+- `src/pages/index.tsx` - Complete rewrite with HeroSection, FeaturesSection, ModulesSection
+- `src/pages/index.module.css` - New styles for homepage components
+- `docusaurus.config.ts` - Removed broken @docusaurus/plugin-client-redirects configuration

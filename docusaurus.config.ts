@@ -75,6 +75,8 @@ const config: Config = {
     ],
   ],
 
+  plugins: [],
+
   // Add the chatkit widget script to be loaded on all pages
   scripts: [
     {
@@ -117,7 +119,49 @@ const config: Config = {
           items: [
             {
               label: 'Introduction',
-              to: '/docs/intro/00-why-physical-ai',
+              to: '/docs/intro/00-index',
+            },
+            {
+              label: 'Module 1: ROS 2',
+              to: '/docs/module-1-ros2/00-overview',
+            },
+            {
+              label: 'Module 2: Digital Twin',
+              to: '/docs/module-2-digital-twin/00-overview',
+            },
+          ],
+        },
+        {
+          title: 'More',
+          items: [
+            {
+              label: 'Module 3: Isaac',
+              to: '/docs/module-3-isaac/00-overview',
+            },
+            {
+              label: 'Module 4: VLA',
+              to: '/docs/module-4-vla/00-overview',
+            },
+            {
+              label: 'Capstone',
+              to: '/docs/capstone/00-autonomous-humanoid',
+            },
+          ],
+        },
+        {
+          title: 'Resources',
+          items: [
+            {
+              label: 'Hardware Requirements',
+              to: '/docs/hardware-requirements/00-workstation',
+            },
+            {
+              label: 'Glossary',
+              to: '/docs/appendices/00-glossary',
+            },
+            {
+              label: 'GitHub',
+              href: 'https://github.com/Aliyano0/Humanoid-robotics-book',
             },
           ],
         },
