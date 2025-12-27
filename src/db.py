@@ -30,20 +30,37 @@ class DatabaseConnection:
             self.conn.close()
             self.conn = None
 
+    def _ensure_connection(self):
+        """Ensure connection is alive, reconnect if needed"""
+        if self.conn is None:
+            self.connect()
+            return
+
+        # Check if connection is still alive
+        try:
+            # Simple query to test connection
+            with self.conn.cursor() as cursor:
+                cursor.execute("SELECT 1")
+        except (psycopg.OperationalError, psycopg.InterfaceError):
+            # Connection is dead, reconnect
+            print("Connection lost, reconnecting...")
+            try:
+                self.conn.close()
+            except Exception:
+                pass
+            self.conn = None
+            self.connect()
+
     @contextmanager
     def get_connection(self):
         """Get a connection context"""
-        if not self.conn:
-            self.connect()
-
+        self._ensure_connection()
         yield self.conn
 
     @contextmanager
     def get_cursor(self):
         """Get a cursor context"""
-        if not self.conn:
-            self.connect()
-
+        self._ensure_connection()
         with self.conn.cursor(row_factory=dict_row) as cursor:
             yield cursor
 
