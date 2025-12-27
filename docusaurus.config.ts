@@ -80,7 +80,7 @@ const config: Config = {
   // Add the chatkit widget script to be loaded on all pages
   scripts: [
     {
-      src: '/Humanoid-robotics-book/chatkit-widget.js?v=2',
+      src: '/Humanoid-robotics-book/chatkit-widget.js?v=3',
       async: true,
       defer: true,
     },

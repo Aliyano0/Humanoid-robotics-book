@@ -1,7 +1,7 @@
 import { User, BackgroundInfo } from '../types/auth';
 import logger from '../utils/logger';
 
-// Backend URL - use environment variable, window variable, or default to localhost
+// Backend URL - use environment variable, window variable, or default based on hostname
 const getBackendUrl = () => {
   // Check window variable first (set by runtime config)
   if (typeof window !== 'undefined' && (window as any).BACKEND_URL) {
@@ -11,11 +11,16 @@ const getBackendUrl = () => {
   if (typeof process !== 'undefined' && process.env?.BACKEND_URL) {
     return process.env.BACKEND_URL;
   }
-  // Default to localhost for development, Hugging Face Spaces for production
-  const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
-  return isProduction
-    ? 'https://aliyan-a-book-hackathon.hf.space'
-    : 'http://localhost:8000';
+  // Default to Hugging Face Spaces for production (GitHub Pages), localhost for development
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    // Use localhost backend only when running on localhost
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'http://localhost:8000';
+    }
+  }
+  // Default to production backend (Hugging Face Spaces)
+  return 'https://aliyan-a-book-hackathon.hf.space';
 };
 
 // AuthService to handle authentication logic
