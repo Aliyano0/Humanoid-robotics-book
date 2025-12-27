@@ -57,7 +57,7 @@ const PersonalizeButton: React.FC<PersonalizeButtonProps> = ({ moduleId, onPerso
             className="auth-button flex-1"
             onClick={() => {
               // Redirect to profile page to update background info
-              window.location.href = '/profile';
+              window.location.href = '/Humanoid-robotics-book/profile';
             }}
           >
             Update Profile

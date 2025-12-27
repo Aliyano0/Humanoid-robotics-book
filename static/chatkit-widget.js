@@ -27,6 +27,8 @@
         primaryColor: '#3b82f6',
         secondaryColor: '#f3f4f6'
     };
+
+
     // State management
     let sessionId = localStorage.getItem('chatbot-session-id') || generateUUID();
     localStorage.setItem('chatbot-session-id', sessionId);
@@ -239,13 +241,16 @@
     // Check if user is authenticated by looking for auth token in localStorage
     function isAuthenticated() {
         const token = localStorage.getItem('auth_token');
+        console.log('isAuthenticated check - token:', token ? 'exists' : 'null');
         return !!token;
     }
 
     // Toggle chat window visibility
     function toggleChatWindow() {
+        console.log('toggleChatWindow called');
         // Check authentication before opening chat
         if (!isAuthenticated()) {
+            console.log('User not authenticated, showing auth prompt');
             // Show authentication prompt instead of chat window
             showAuthPrompt();
             return;
@@ -451,6 +456,14 @@
 
     // Show authentication prompt when user tries to access chat without being authenticated
     function showAuthPrompt() {
+        console.log('showAuthPrompt called - user not authenticated');
+
+        // Remove any existing auth overlay
+        const existingOverlay = document.getElementById('chatkit-auth-overlay');
+        if (existingOverlay) {
+            existingOverlay.remove();
+        }
+
         // Create overlay
         const overlay = document.createElement('div');
         overlay.id = 'chatkit-auth-overlay';
@@ -485,7 +498,7 @@
             <h3 style="margin: 0 0 16px; color: #1f2937;">Authentication Required</h3>
             <p style="margin: 0 0 20px; color: #4b5563;">You need to be logged in to use the chatbot feature.</p>
             <div style="display: flex; flex-direction: column; gap: 12px;">
-                <a href="/login" style="
+                <a href="${CONFIG.loginPage}" style="
                     display: block;
                     padding: 12px;
                     background-color: ${CONFIG.primaryColor};
@@ -494,7 +507,7 @@
                     border-radius: 6px;
                     font-weight: 500;
                 ">Log In</a>
-                <a href="/signup" style="
+                <a href="${CONFIG.signupPage}" style="
                     display: block;
                     padding: 12px;
                     background-color: #f3f4f6;

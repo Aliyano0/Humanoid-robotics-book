@@ -38,7 +38,7 @@ const AuthNavbar: React.FC = () => {
     <nav className="navbar navbar--fixed-top">
       <div className="navbar__inner">
         <div className="navbar__items">
-          <Link to="/" className="navbar__brand">
+          <Link to="/Humanoid-robotics-book" className="navbar__brand">
             <span className="navbar__title">{siteConfig.title}</span>
           </Link>
           {/* <Link to="/docs/intro/00-index" className="navbar__item navbar__link">

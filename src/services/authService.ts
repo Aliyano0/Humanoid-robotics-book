@@ -1,6 +1,23 @@
 import { User, BackgroundInfo } from '../types/auth';
 import logger from '../utils/logger';
 
+// Backend URL - use environment variable, window variable, or default to localhost
+const getBackendUrl = () => {
+  // Check window variable first (set by runtime config)
+  if (typeof window !== 'undefined' && (window as any).BACKEND_URL) {
+    return (window as any).BACKEND_URL;
+  }
+  // Check environment variable
+  if (typeof process !== 'undefined' && process.env?.BACKEND_URL) {
+    return process.env.BACKEND_URL;
+  }
+  // Default to localhost for development, Hugging Face Spaces for production
+  const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost';
+  return isProduction
+    ? 'https://aliyan-a-book-hackathon.hf.space'
+    : 'http://localhost:8000';
+};
+
 // AuthService to handle authentication logic
 class AuthService {
   // Signup method that collects background information
@@ -14,9 +31,7 @@ class AuthService {
       logger.info('Starting user signup process', { email, name }, 'unknown');
 
       // Call the FastAPI backend for signup
-      const backendUrl = typeof process !== 'undefined' && process.env?.BACKEND_URL
-        ? process.env.BACKEND_URL
-        : 'http://localhost:8000';
+      const backendUrl = getBackendUrl();
       const response = await fetch(`${backendUrl}/api/auth/signup`, {
         method: 'POST',
         headers: {
@@ -58,9 +73,7 @@ class AuthService {
       logger.info('Starting user login process', { email }, 'unknown');
 
       // Call the FastAPI backend for login
-      const backendUrl = typeof process !== 'undefined' && process.env?.BACKEND_URL
-        ? process.env.BACKEND_URL
-        : 'http://localhost:8000';
+      const backendUrl = getBackendUrl();
       const response = await fetch(`${backendUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
@@ -99,9 +112,7 @@ class AuthService {
     try {
       // For OAuth, we need to redirect to the FastAPI OAuth endpoint
       // This will handle the OAuth flow and redirect back
-      const backendUrl = typeof process !== 'undefined' && process.env?.BACKEND_URL
-        ? process.env.BACKEND_URL
-        : 'http://localhost:8000';
+      const backendUrl = getBackendUrl();
       window.location.href = `${backendUrl}/api/auth/oauth/google`; // FastAPI Google OAuth endpoint
       return { user: null }; // This won't be reached due to redirect
     } catch (error) {
@@ -117,9 +128,7 @@ class AuthService {
   async loginWithGitHub(): Promise<{ user: User; error?: string }> {
     try {
       // For OAuth, we need to redirect to the FastAPI OAuth endpoint
-      const backendUrl = typeof process !== 'undefined' && process.env?.BACKEND_URL
-        ? process.env.BACKEND_URL
-        : 'http://localhost:8000';
+      const backendUrl = getBackendUrl();
       window.location.href = `${backendUrl}/api/auth/oauth/github`; // FastAPI GitHub OAuth endpoint
       return { user: null }; // This won't be reached due to redirect
     } catch (error) {
@@ -137,9 +146,7 @@ class AuthService {
       logger.info('Updating background info for user', { userId, backgroundInfo }, userId);
 
       // Call the FastAPI backend to update the user's background info
-      const backendUrl = typeof process !== 'undefined' && process.env?.BACKEND_URL
-        ? process.env.BACKEND_URL
-        : 'http://localhost:8000';
+      const backendUrl = getBackendUrl();
       const response = await fetch(`${backendUrl}/api/auth/me`, {
         method: 'PATCH',
         headers: {
@@ -194,9 +201,7 @@ class AuthService {
       logger.info('Initiating password reset for user', { email }, 'unknown');
 
       // Call the FastAPI backend to initiate password reset
-      const backendUrl = typeof process !== 'undefined' && process.env?.BACKEND_URL
-        ? process.env.BACKEND_URL
-        : 'http://localhost:8000';
+      const backendUrl = getBackendUrl();
       const response = await fetch(`${backendUrl}/api/auth/forgot-password`, {
         method: 'POST',
         headers: {
@@ -230,9 +235,7 @@ class AuthService {
       logger.info('Resetting password with token', { token: token.substring(0, 10) + '...' }, 'unknown');
 
       // Call the FastAPI backend to reset password
-      const backendUrl = typeof process !== 'undefined' && process.env?.BACKEND_URL
-        ? process.env.BACKEND_URL
-        : 'http://localhost:8000';
+      const backendUrl = getBackendUrl();
       const response = await fetch(`${backendUrl}/api/auth/reset-password`, {
         method: 'POST',
         headers: {
@@ -265,9 +268,7 @@ class AuthService {
   async getCurrentUser(): Promise<User | null> {
     try {
       // Call the FastAPI backend to get the current user session
-      const backendUrl = typeof process !== 'undefined' && process.env?.BACKEND_URL
-        ? process.env.BACKEND_URL
-        : 'http://localhost:8000';
+      const backendUrl = getBackendUrl();
       const response = await fetch(`${backendUrl}/api/auth/me`, {
         method: 'GET',
         headers: {
@@ -292,9 +293,7 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       // Call the FastAPI backend for logout
-      const backendUrl = typeof process !== 'undefined' && process.env?.BACKEND_URL
-        ? process.env.BACKEND_URL
-        : 'http://localhost:8000';
+      const backendUrl = getBackendUrl();
       const response = await fetch(`${backendUrl}/api/auth/logout`, {
         method: 'POST',
         headers: {

@@ -22,8 +22,8 @@ const ProtectedChatbot: React.FC<ProtectedChatbotProps> = ({ children }) => {
         <h3 className="auth-title">Authentication Required</h3>
         <p>You must be logged in to use the chatbot feature.</p>
         <div className="flex gap-2 mt-4">
-          <a href="/login" className="auth-button flex-1 text-center">Log In</a>
-          <a href="/signup" className="auth-button button--secondary flex-1 text-center">Sign Up</a>
+          <a href="/Humanoid-robotics-book/login" className="auth-button flex-1 text-center">Log In</a>
+          <a href="/Humanoid-robotics-book/signup" className="auth-button button--secondary flex-1 text-center">Sign Up</a>
         </div>
       </div>
     );
