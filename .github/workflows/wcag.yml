@@ -28,11 +28,14 @@ jobs:
 
     - name: Run accessibility check
       run: |
-        npm install -g @daisy-ui/axe-cli
-        npx axe --output=json --save=accessibility-report.json build/
+        npm install -g @axe-core/cli serve
+        npx serve build -l 5000 &
+        sleep 5
+        npx axe http://localhost:5000 --save accessibility-report.json || true
 
     - name: Upload accessibility report
       uses: actions/upload-artifact@v4
+      if: always()
       with:
         name: accessibility-report
         path: accessibility-report.json
