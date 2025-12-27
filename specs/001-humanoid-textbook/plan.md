@@ -1,7 +1,7 @@
 # Implementation Plan: Beginner Humanoid Textbook
 
-**Branch**: `001-beginner-humanoid-textbook` | **Date**: 2025-12-08 | **Spec**: /specs/001-beginner-humanoid-textbook/spec.md
-**Input**: Feature specification from `/specs/001-beginner-humanoid-textbook/spec.md`
+**Branch**: `001-humanoid-textbook` | **Date**: 2025-12-08 | **Last Updated**: 2025-12-26 | **Spec**: /specs/001-humanoid-textbook/spec.md
+**Input**: Feature specification from `/specs/001-humanoid-textbook/spec.md`
 
 **Note**: This template is filled in by the `/sp.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
@@ -173,3 +173,44 @@ sidebars.ts            # Sidebar configuration (defines navigation)
 **Phase 2 – Foundation** (per module): `/sp.write` one module's pages (e.g., `module-1-ros2/00–02.mdx`); build/test locally.
 **Phase 3 – Analysis** (per module): Validate code/runs, add visuals/callouts; sequential: Finish Module 1 → 2 → etc.
 **Phase 4 – Synthesis** (full site): Intro/Capstone/Hardware verbatim inserts; final polish, full checklist, deploy preview.
+
+## Homepage UI Architecture (Added 2025-12-26)
+
+### Components
+
+```text
+src/pages/
+├── index.tsx              # Main homepage component
+└── index.module.css       # Homepage styles
+
+Homepage Structure:
+├── HeroSection            # Dark gradient background, title, subtitle, CTA buttons
+├── FeaturesSection        # 3-column grid (Beginner Friendly, Hands-On Code, Practical Focus)
+└── ModulesSection         # 4-column responsive grid with 8 module cards
+```
+
+### Module Card Configuration
+
+| Module | Icon | Color | Link |
+|--------|------|-------|------|
+| Introduction | 🚀 | #6366f1 | /docs/intro/00-index |
+| Module 1: ROS 2 | 🧠 | #8b5cf6 | /docs/module-1-ros2/00-overview |
+| Module 2: Digital Twin | 🎮 | #06b6d4 | /docs/module-2-digital-twin/00-overview |
+| Module 3: NVIDIA Isaac | 🤖 | #10b981 | /docs/module-3-isaac/00-overview |
+| Module 4: VLA | 👁️ | #f59e0b | /docs/module-4-vla/00-overview |
+| Capstone | 🏆 | #ef4444 | /docs/capstone/00-autonomous-humanoid |
+| Hardware Requirements | 💻 | #64748b | /docs/hardware-requirements/00-workstation |
+| Glossary | 📖 | #84cc16 | /docs/appendices/00-glossary |
+
+### Responsive Breakpoints
+
+- Desktop (>996px): 4-column module grid, 3-column features
+- Tablet (576px-996px): 2-column module grid, 1-column features
+- Mobile (<576px): 1-column module grid, stacked buttons
+
+### Design Decisions
+
+- **Hero Background**: Dark gradient (#1a1a2e → #16213e → #0f3460) with subtle pattern overlay
+- **Primary CTA**: "Start Learning" → /docs/intro/00-index
+- **Secondary CTA**: "View on GitHub" → External repository link
+- **Card Interactions**: Hover effects with translateY(-4px), border highlight, arrow animation
