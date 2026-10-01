@@ -11,10 +11,17 @@ load_dotenv()
 class QdrantManager:
     def __init__(self):
         # Initialize Qdrant client with cluster endpoint and API key
+        endpoint = os.getenv("QDRANT_CLUSTER_ENDPOINT")
+        api_key = os.getenv("QDRANT_API_KEY")
+
+        print(f"Initializing Qdrant client with endpoint: {endpoint}")
+
         self.client = QdrantClient(
-            url=os.getenv("QDRANT_CLUSTER_ENDPOINT"),
-            api_key=os.getenv("QDRANT_API_KEY"),
-            prefer_grpc=True  # Use gRPC for better performance if available
+            url=endpoint,
+            api_key=api_key,
+            prefer_grpc=False,  # Use HTTP REST API for better compatibility with Qdrant Cloud
+            timeout=60,  # Increase timeout for cloud connections
+            https=True  # Explicitly use HTTPS
         )
 
         # Collection name for book content
